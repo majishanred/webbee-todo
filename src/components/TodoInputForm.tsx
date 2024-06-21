@@ -1,10 +1,10 @@
 import { Dispatch, useState } from 'react';
-import { IItemBody } from '../interfaces/ITodoItem';
+import { ITodoItemBody } from '../interfaces/ITodoItem';
 import { StyledForm } from '../styled_components/Form.styled';
 import { StyledFormButtonGroup } from '../styled_components/FormButtonGroup.styled';
 import { StyledButton } from '../styled_components/Button.styled';
 
-export default function TodoInputForm({ onSave }: { onSave: Dispatch<IItemBody> }) {
+export default function TodoInputForm({ onSave }: { onSave: Dispatch<ITodoItemBody> }) {
   const [todoInput, setTodoInput] = useState<string>('');
 
   const handleOnCreate = () => {
@@ -21,7 +21,7 @@ export default function TodoInputForm({ onSave }: { onSave: Dispatch<IItemBody> 
     <StyledForm id="todoInsert">
       <label>
         <input
-          name="taskInput"
+          name="newTaskInput"
           value={todoInput}
           onChange={(e) => setTodoInput(e.target.value)}
           placeholder="Print here!"

@@ -36,6 +36,16 @@ function App() {
     [tasks],
   );
 
+  const onBatchAdd = useCallback(
+    (newTodoItems: ITodoItemBody[]) => {
+      const newTodos = newTodoItems.map((todo) => {
+        return { ...todo, id: uuidv1() };
+      });
+      setTasks(() => [...tasks, ...newTodos]);
+    },
+    [tasks],
+  );
+
   const onUpdate = useCallback(
     (todoItem: ITodoItem) => {
       const index = tasks.findIndex((elem) => elem.id === todoItem.id);
