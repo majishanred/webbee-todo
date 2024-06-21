@@ -1,58 +1,14 @@
-import TodoListElem from './components/TodoListElem';
+import TodoListElem from './components/TodoItem';
 import TodoInputForm from './components/TodoInputForm';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { v1 as uuidv1 } from 'uuid';
-import styled from 'styled-components';
-
-export type TodoListElem = {
-  id: string;
-  task: string;
-  isDone: boolean;
-};
-
-export type TodoListElemBody = {
-  task: string;
-  isDone: boolean;
-};
-
-const StyledList = styled.ul`
-  list-style-type: none;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-
-  margin-block: 0;
-  margin-inline: 0;
-  padding-inline-start: 0;
-  gap: 15px;
-
-  margin-top: 15px;
-`;
-
-const Background = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-
-  z-index: -99;
-
-  width: 100%;
-  height: 100vh;
-
-  background-color: hsl(180, 52%, 96%);
-`;
-
-const Wrapper = styled.section`
-  display: flex;
-  flex-direction: column;
-
-  width: 100%;
-  max-width: 800px;
-  margin: 50px auto;
-`;
+import { ITodoItemBody, ITodoItem } from './interfaces/ITodoItem';
+import { StyledBackground } from './styled_components/Background.styled';
+import { StyledWrapper } from './styled_components/Wrapper.styled';
+import { StyledMenu } from './styled_components/Menu.styled';
 
 function App() {
-  const [tasks, setTasks] = useState<TodoListElem[]>([
+  const [tasks, setTasks] = useState<ITodoItem[]>([
     {
       id: uuidv1(),
       task: 'Feed a cat',
@@ -67,41 +23,51 @@ function App() {
 
   const [filterInput, setFilterInput] = useState('');
 
-  const filteredTasks = filterInput
-    ? tasks.filter((elem) => elem.task.toLowerCase().includes(filterInput.toLowerCase()))
-    : tasks;
+  const filteredTasks = useMemo(
+    () => (filterInput ? tasks.filter((elem) => elem.task.toLowerCase().includes(filterInput.toLowerCase())) : tasks),
+    [tasks, filterInput],
+  );
 
-  function onAdd(todo_item: TodoListElemBody) {
-    const newTodo = { ...todo_item, id: uuidv1() };
-    setTasks(() => [...tasks, newTodo]);
-  }
+  const onAdd = useCallback(
+    (newTodoItem: ITodoItemBody) => {
+      const newTodo = { ...newTodoItem, id: uuidv1() };
+      setTasks(() => [...tasks, newTodo]);
+    },
+    [tasks],
+  );
 
-  function onUpdate(todo_item: TodoListElem) {
-    const index = tasks.findIndex((elem) => elem.id === todo_item.id);
-    const newArr = [...tasks];
-    newArr[index] = todo_item;
+  const onUpdate = useCallback(
+    (todoItem: ITodoItem) => {
+      const index = tasks.findIndex((elem) => elem.id === todoItem.id);
+      const newArr = [...tasks];
+      newArr[index] = todoItem;
 
-    setTasks(() => [...newArr]);
-  }
+      setTasks(newArr);
+    },
+    [tasks],
+  );
 
-  function onDelete(todo_item: TodoListElem) {
-    setTasks(tasks.filter((elem) => elem.id !== todo_item.id));
-  }
+  const onDelete = useCallback(
+    (todoItem: ITodoItem) => {
+      setTasks(tasks.filter((elem) => elem.id !== todoItem.id));
+    },
+    [tasks],
+  );
 
   return (
     <>
-      <Background></Background>
-      <Wrapper>
+      <StyledBackground></StyledBackground>
+      <StyledWrapper>
         <input value={filterInput} onChange={(e) => setFilterInput(e.target.value)} placeholder="Filter" />
 
-        <StyledList>
+        <StyledMenu>
           {filteredTasks.map((elem) => (
-            <TodoListElem key={elem.id} todo_item={elem} onUpdate={onUpdate} onDelete={onDelete}></TodoListElem>
+            <TodoListElem key={elem.id} todoItem={elem} onUpdate={onUpdate} onDelete={onDelete}></TodoListElem>
           ))}
-        </StyledList>
+        </StyledMenu>
 
         <TodoInputForm onSave={onAdd}></TodoInputForm>
-      </Wrapper>
+      </StyledWrapper>
     </>
   );
 }

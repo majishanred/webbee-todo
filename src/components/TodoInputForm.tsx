@@ -1,32 +1,10 @@
 import { Dispatch, useState } from 'react';
-import styled from 'styled-components';
-import { TodoListElemBody } from '../App';
+import { IItemBody } from '../interfaces/ITodoItem';
+import { StyledForm } from '../styled_components/Form.styled';
+import { StyledFormButtonGroup } from '../styled_components/FormButtonGroup.styled';
+import { StyledButton } from '../styled_components/Button.styled';
 
-export const StyledForm = styled.form`
-  margin-top: 20px;
-
-  padding: 10px 20px;
-
-  background-color: #ffffff;
-
-  display: flex;
-  align-items: center;
-
-  & > button {
-    margin-left: auto;
-    border: 0;
-    background-color: hsl(180, 29%, 50%);
-    color: #ffffff;
-
-    padding: 10px 15px;
-
-    border-radius: 5px;
-
-    font-size: 15px;
-  }
-`;
-
-export default function TodoInputForm({ onSave }: { onSave: Dispatch<TodoListElemBody> }) {
+export default function TodoInputForm({ onSave }: { onSave: Dispatch<IItemBody> }) {
   const [todoInput, setTodoInput] = useState<string>('');
 
   const handleOnCreate = () => {
@@ -35,8 +13,8 @@ export default function TodoInputForm({ onSave }: { onSave: Dispatch<TodoListEle
       isDone: false,
     };
 
-    setTodoInput('');
     onSave(newTodo);
+    setTodoInput('');
   };
 
   return (
@@ -49,9 +27,11 @@ export default function TodoInputForm({ onSave }: { onSave: Dispatch<TodoListEle
           placeholder="Print here!"
         ></input>
       </label>
-      <button onClick={() => handleOnCreate()} type="button">
-        Create new task
-      </button>
+      <StyledFormButtonGroup>
+        <StyledButton onClick={() => handleOnCreate()} type="button">
+          Create new task
+        </StyledButton>
+      </StyledFormButtonGroup>
     </StyledForm>
   );
 }
