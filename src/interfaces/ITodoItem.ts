@@ -1,7 +1,7 @@
-export type ITodoItem = {
+export interface ITodoItem {
   id: string;
   task: string;
   isDone: boolean;
-};
+}
 
-export type ITodoItemBody = Omit<ITodoItem, 'id'>;
+export interface ITodoItemBody extends Omit<ITodoItem, 'id'> {}
