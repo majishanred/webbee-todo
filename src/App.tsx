@@ -16,7 +16,7 @@ function App() {
     },
     {
       id: uuidv1(),
-      task: 'By a milk',
+      task: 'Buy a milk',
       isDone: true,
     },
   ]);
@@ -28,41 +28,33 @@ function App() {
     [tasks, filterInput],
   );
 
-  const onAdd = useCallback(
-    (newTodoItem: ITodoItemBody) => {
-      const newTodo = { ...newTodoItem, id: uuidv1() };
-      setTasks(() => [...tasks, newTodo]);
-    },
-    [tasks],
-  );
+  const onAdd = useCallback((newTodoItem: ITodoItemBody) => {
+    if (!newTodoItem.task) return;
+    const newTodo = { ...newTodoItem, id: uuidv1() };
+    setTasks((tasks) => [...tasks, newTodo]);
+  }, []);
 
-  const onBatchAdd = useCallback(
-    (newTodoItems: ITodoItemBody[]) => {
-      const newTodos = newTodoItems.map((todo) => {
-        return { ...todo, id: uuidv1() };
-      });
-      setTasks(() => [...tasks, ...newTodos]);
-    },
-    [tasks],
-  );
-
-  const onUpdate = useCallback(
-    (todoItem: ITodoItem) => {
+  const onUpdate = useCallback((todoItem: ITodoItem) => {
+    if (!todoItem.task) return;
+    setTasks((tasks) => {
       const index = tasks.findIndex((elem) => elem.id === todoItem.id);
       const newArr = [...tasks];
       newArr[index] = todoItem;
 
-      setTasks(newArr);
-    },
-    [tasks],
-  );
+      return newArr;
+    });
+  }, []);
 
-  const onDelete = useCallback(
-    (todoItem: ITodoItem) => {
-      setTasks(tasks.filter((elem) => elem.id !== todoItem.id));
-    },
-    [tasks],
-  );
+  const onDelete = useCallback((todoItem: ITodoItem) => {
+    setTasks((tasks) => tasks.filter((elem) => elem.id !== todoItem.id));
+  }, []);
+
+  const onBatchAdd = useCallback((newTodoItems: ITodoItemBody[]) => {
+    const newTodos = newTodoItems.map((todo) => {
+      return { ...todo, id: uuidv1() };
+    });
+    setTasks((tasks) => [...tasks, ...newTodos]);
+  }, []);
 
   return (
     <>

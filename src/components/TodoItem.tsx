@@ -1,4 +1,4 @@
-import { ChangeEventHandler, Dispatch, useState } from 'react';
+import { ChangeEvent, Dispatch, memo, useState } from 'react';
 import { ITodoItem } from '../interfaces/ITodoItem';
 import { StyledTodoItem, StyledTodoText } from '../styled_components/TodoItem.styled';
 import { StyledButton } from '../styled_components/Button.styled';
@@ -11,7 +11,7 @@ type TodoElementProps = {
   onDelete: Dispatch<ITodoItem>;
 };
 
-export default function TodoListElem({ todoItem, onUpdate, onDelete }: TodoElementProps) {
+const TodoListElem = memo(function ({ todoItem, onUpdate, onDelete }: TodoElementProps) {
   const [isEdit, setIsEdit] = useState(false);
   const [input, setInput] = useState(todoItem.task);
 
@@ -25,7 +25,7 @@ export default function TodoListElem({ todoItem, onUpdate, onDelete }: TodoEleme
     setIsEdit(false);
   };
 
-  const handleCheckboxClick: ChangeEventHandler<HTMLInputElement> = (e) => {
+  const handleCheckboxClick = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.checked;
     const updatedTodo = { ...todoItem, isDone: value };
     onUpdate(updatedTodo);
@@ -34,10 +34,17 @@ export default function TodoListElem({ todoItem, onUpdate, onDelete }: TodoEleme
   if (isEdit) {
     return (
       <StyledForm>
-        <input name="editTaskInput" defaultValue={input} onChange={(e) => setInput(e.target.value)} />
+        <input defaultValue={input} onChange={(e) => setInput(e.target.value)} />
         <StyledFormButtonGroup>
-          <StyledButton onClick={() => handleOnSaveClick()}>Save</StyledButton>
-          <StyledButton onClick={() => setIsEdit(false)}>Cancel</StyledButton>
+          <StyledButton onClick={handleOnSaveClick}>Save</StyledButton>
+          <StyledButton
+            onClick={() => {
+              setInput(todoItem.task);
+              setIsEdit(false);
+            }}
+          >
+            Cancel
+          </StyledButton>
         </StyledFormButtonGroup>
       </StyledForm>
     );
@@ -45,7 +52,7 @@ export default function TodoListElem({ todoItem, onUpdate, onDelete }: TodoEleme
 
   return (
     <StyledTodoItem>
-      <input name="inputCheckbox" type="checkbox" checked={todoItem.isDone} onChange={handleCheckboxClick} />
+      <input type="checkbox" checked={todoItem.isDone} onChange={handleCheckboxClick} />
       <StyledTodoText $isDone={todoItem.isDone}>{todoItem.task}</StyledTodoText>
       <StyledFormButtonGroup>
         <StyledButton onClick={() => setIsEdit(true)}>Edit</StyledButton>
@@ -53,4 +60,6 @@ export default function TodoListElem({ todoItem, onUpdate, onDelete }: TodoEleme
       </StyledFormButtonGroup>
     </StyledTodoItem>
   );
-}
+});
+
+export default TodoListElem;
