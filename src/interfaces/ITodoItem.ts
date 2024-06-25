@@ -4,4 +4,4 @@ export interface ITodoItem {
   isDone: boolean;
 }
 
-export interface ITodoItemBody extends Omit<ITodoItem, 'id'> {}
+export interface ITodoItemCreate extends Omit<ITodoItem, 'id'> {}

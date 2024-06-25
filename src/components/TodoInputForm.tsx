@@ -1,45 +1,33 @@
-import { Dispatch, memo, useRef, useState } from 'react';
-import { ITodoItemBody } from '../interfaces/ITodoItem';
-import { StyledForm } from '../styled_components/Form.styled';
-import { StyledFormButtonGroup } from '../styled_components/FormButtonGroup.styled';
-import { StyledButton } from '../styled_components/Button.styled';
+import { ChangeEvent, Dispatch, memo, useState } from 'react';
+import { ITodoItemCreate } from '../interfaces/ITodoItem';
+import { Box, Button, ButtonGroup, TextField } from '@mui/material';
 
-const TodoInputForm = memo(function ({ onSave }: { onSave: Dispatch<ITodoItemBody> }) {
-  const [todoInput, setTodoInput] = useState<string>('');
+const TodoInputForm = memo(function ({ onSave }: { onSave: Dispatch<ITodoItemCreate> }) {
+  const [input, setInput] = useState('');
 
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const setInput = () => {
-    setTodoInput(inputRef.current!.value);
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
   };
 
   const handleOnCreate = () => {
     const newTodo = {
-      task: todoInput,
+      task: input,
       isDone: false,
     };
 
     onSave(newTodo);
-    setTodoInput('');
+    setInput('');
   };
 
   return (
-    <StyledForm>
-      <label>
-        <input
-          name="newTaskInput"
-          value={todoInput}
-          onChange={setInput}
-          placeholder="Print here!"
-          ref={inputRef}
-        ></input>
-      </label>
-      <StyledFormButtonGroup>
-        <StyledButton onClick={handleOnCreate} type="button">
+    <Box component="div" display="flex" alignItems="center">
+      <TextField placeholder="Type task here" value={input} onChange={handleOnChange} sx={{ width: '70%' }}></TextField>
+      <ButtonGroup sx={{ marginLeft: 'auto' }}>
+        <Button onClick={handleOnCreate} type="button" variant="contained">
           Create new task
-        </StyledButton>
-      </StyledFormButtonGroup>
-    </StyledForm>
+        </Button>
+      </ButtonGroup>
+    </Box>
   );
 });
 

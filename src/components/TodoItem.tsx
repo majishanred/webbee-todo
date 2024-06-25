@@ -1,9 +1,6 @@
 import { ChangeEvent, Dispatch, memo, useState } from 'react';
 import { ITodoItem } from '../interfaces/ITodoItem';
-import { StyledTodoItem, StyledTodoText } from '../styled_components/TodoItem.styled';
-import { StyledButton } from '../styled_components/Button.styled';
-import { StyledForm } from '../styled_components/Form.styled';
-import { StyledFormButtonGroup } from '../styled_components/FormButtonGroup.styled';
+import { Box, BoxProps, Button, ButtonGroup, Checkbox, TextField, Typography, styled } from '@mui/material';
 
 type TodoElementProps = {
   todoItem: ITodoItem;
@@ -31,35 +28,56 @@ const TodoListElem = memo(function ({ todoItem, onUpdate, onDelete }: TodoElemen
     onUpdate(updatedTodo);
   };
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+  };
+
   if (isEdit) {
     return (
-      <StyledForm>
-        <input defaultValue={input} onChange={(e) => setInput(e.target.value)} />
-        <StyledFormButtonGroup>
-          <StyledButton onClick={handleOnSaveClick}>Save</StyledButton>
-          <StyledButton
+      <TodoStyledBox>
+        <TextField value={input} onChange={handleChange} />
+        <ButtonGroup disableRipple={true} sx={{ marginLeft: 'auto' }}>
+          <Button onClick={handleOnSaveClick} variant="contained" color="success">
+            Save
+          </Button>
+          <Button
             onClick={() => {
               setInput(todoItem.task);
               setIsEdit(false);
             }}
           >
             Cancel
-          </StyledButton>
-        </StyledFormButtonGroup>
-      </StyledForm>
+          </Button>
+        </ButtonGroup>
+      </TodoStyledBox>
     );
   }
 
   return (
-    <StyledTodoItem>
-      <input type="checkbox" checked={todoItem.isDone} onChange={handleCheckboxClick} />
-      <StyledTodoText $isDone={todoItem.isDone}>{todoItem.task}</StyledTodoText>
-      <StyledFormButtonGroup>
-        <StyledButton onClick={() => setIsEdit(true)}>Edit</StyledButton>
-        <StyledButton onClick={() => onDelete(todoItem)}>Delete</StyledButton>
-      </StyledFormButtonGroup>
-    </StyledTodoItem>
+    <TodoStyledBox component="div">
+      <Checkbox checked={todoItem.isDone} onChange={handleCheckboxClick} />
+      <Typography component={'span'} variant="body1" sx={{ textDecoration: todoItem.isDone ? 'line-through' : 'none' }}>
+        {todoItem.task}
+      </Typography>
+      <ButtonGroup disableRipple={true} sx={{ marginLeft: 'auto' }}>
+        <Button onClick={() => setIsEdit(true)} variant="contained">
+          Edit
+        </Button>
+        <Button onClick={() => onDelete(todoItem)} variant="contained" color="error">
+          Delete
+        </Button>
+      </ButtonGroup>
+    </TodoStyledBox>
   );
 });
 
 export default TodoListElem;
+
+const TodoStyledBox = styled(Box)<BoxProps>`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-top: 1px solid #a0a0a0;
+  border-bottom: 1px solid #a0a0a0;
+  padding: 8px 16px;
+`;

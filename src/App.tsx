@@ -1,11 +1,10 @@
-import TodoListElem from './components/TodoItem';
-import TodoInputForm from './components/TodoInputForm';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { v1 as uuidv1, v1 } from 'uuid';
-import { ITodoItemBody, ITodoItem } from './interfaces/ITodoItem';
-import { StyledBackground } from './styled_components/Background.styled';
-import { StyledWrapper } from './styled_components/Wrapper.styled';
-import { StyledMenu } from './styled_components/Menu.styled';
+import { ITodoItem, ITodoItemCreate } from './interfaces/ITodoItem';
+import { Stack, Typography } from '@mui/material';
+import TodoFilter from './components/TodoFilter';
+import TodoList from './components/TodoList';
+import TodoInputForm from './components/TodoInputForm';
 
 function App() {
   const [tasks, setTasks] = useState<ITodoItem[]>([
@@ -23,12 +22,7 @@ function App() {
 
   const [filterInput, setFilterInput] = useState('');
 
-  const filteredTasks = useMemo(
-    () => (filterInput ? tasks.filter((elem) => elem.task.toLowerCase().includes(filterInput.toLowerCase())) : tasks),
-    [tasks, filterInput],
-  );
-
-  const onAdd = useCallback((newTodo: ITodoItemBody | ITodoItemBody[]) => {
+  const onAdd = useCallback((newTodo: ITodoItemCreate | ITodoItemCreate[]) => {
     if (newTodo instanceof Array) {
       const newTodos = newTodo
         .filter((elem) => elem.task)
@@ -60,20 +54,12 @@ function App() {
   }, []);
 
   return (
-    <>
-      <StyledBackground></StyledBackground>
-      <StyledWrapper>
-        <input value={filterInput} onChange={(e) => setFilterInput(e.target.value)} placeholder="Filter" />
-
-        <StyledMenu>
-          {filteredTasks.map((elem) => (
-            <TodoListElem key={elem.id} todoItem={elem} onUpdate={onUpdate} onDelete={onDelete}></TodoListElem>
-          ))}
-        </StyledMenu>
-
-        <TodoInputForm onSave={onAdd}></TodoInputForm>
-      </StyledWrapper>
-    </>
+    <Stack maxWidth="720px" margin="32px auto" gap="10px">
+      <Typography variant="h3">My Todos</Typography>
+      <TodoFilter filter={filterInput} onFilterSet={setFilterInput} />
+      <TodoInputForm onSave={onAdd}></TodoInputForm>
+      <TodoList todoList={tasks} filter={filterInput} onUpdate={onUpdate} onDelete={onDelete} />
+    </Stack>
   );
 }
 
