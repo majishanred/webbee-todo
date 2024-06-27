@@ -1,15 +1,17 @@
-import { Dispatch, useMemo } from 'react';
+import { Dispatch, useContext, useMemo } from 'react';
 import { ITodoItem } from '../interfaces/ITodoItem';
 import TodoListElem from './TodoItem';
+import ReadFilterContext from '../contexts/readFilterContext';
 
 type TodoListProps = {
   todoList: ITodoItem[];
-  filter: string;
   onUpdate: Dispatch<ITodoItem>;
   onDelete: Dispatch<ITodoItem>;
 };
 
-export default function TodoList({ todoList, filter, onUpdate, onDelete }: TodoListProps) {
+export default function TodoList({ todoList, onUpdate, onDelete }: TodoListProps) {
+  const filter = useContext(ReadFilterContext);
+
   const filteredTasks = useMemo(
     () => (filter ? todoList.filter((elem) => elem.task.toLowerCase().includes(filter.toLowerCase())) : todoList),
     [todoList, filter],
@@ -18,7 +20,7 @@ export default function TodoList({ todoList, filter, onUpdate, onDelete }: TodoL
   return (
     <>
       {filteredTasks.map((todo) => (
-        <TodoListElem key={todo.id} todoItem={todo} onUpdate={onUpdate} onDelete={onDelete}></TodoListElem>
+        <TodoListElem key={todo.id} todoItem={todo} onUpdate={onUpdate} onDelete={onDelete} />
       ))}
     </>
   );

@@ -1,19 +1,16 @@
-import { ChangeEvent, Dispatch, memo, useState } from 'react';
-import { ITodoItem } from '../interfaces/ITodoItem';
+import { ChangeEvent, memo, useState } from 'react';
 import { Box, BoxProps, Button, ButtonGroup, Checkbox, TextField, Typography, styled } from '@mui/material';
+import { ITodoItem } from '../interfaces/ITodoItem';
+import { TodoItemProps } from '../interfaces/TodoItemProps';
 
-type TodoElementProps = {
-  todoItem: ITodoItem;
-  onUpdate: Dispatch<ITodoItem>;
-  onDelete: Dispatch<ITodoItem>;
-};
-
-const TodoListElem = memo(function ({ todoItem, onUpdate, onDelete }: TodoElementProps) {
+const TodoListElem = memo(function ({ todoItem, onUpdate, onDelete }: TodoItemProps) {
   const [isEdit, setIsEdit] = useState(false);
   const [input, setInput] = useState(todoItem.task);
 
+  const { task, isDone } = todoItem;
+
   const handleOnSaveClick = () => {
-    const updatedTodo = {
+    const updatedTodo: ITodoItem = {
       ...todoItem,
       task: input,
     };
@@ -24,7 +21,7 @@ const TodoListElem = memo(function ({ todoItem, onUpdate, onDelete }: TodoElemen
 
   const handleCheckboxClick = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.checked;
-    const updatedTodo = { ...todoItem, isDone: value };
+    const updatedTodo: ITodoItem = { ...todoItem, isDone: value };
     onUpdate(updatedTodo);
   };
 
@@ -42,7 +39,7 @@ const TodoListElem = memo(function ({ todoItem, onUpdate, onDelete }: TodoElemen
           </Button>
           <Button
             onClick={() => {
-              setInput(todoItem.task);
+              setInput(task);
               setIsEdit(false);
             }}
           >
@@ -55,7 +52,7 @@ const TodoListElem = memo(function ({ todoItem, onUpdate, onDelete }: TodoElemen
 
   return (
     <TodoStyledBox component="div">
-      <Checkbox checked={todoItem.isDone} onChange={handleCheckboxClick} />
+      <Checkbox checked={isDone} onChange={handleCheckboxClick} />
       <Typography component={'span'} variant="body1" sx={{ textDecoration: todoItem.isDone ? 'line-through' : 'none' }}>
         {todoItem.task}
       </Typography>

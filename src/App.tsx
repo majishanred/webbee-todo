@@ -2,9 +2,10 @@ import { useCallback, useState } from 'react';
 import { v1 as uuidv1, v1 } from 'uuid';
 import { ITodoItem, ITodoItemCreate } from './interfaces/ITodoItem';
 import { Stack, Typography } from '@mui/material';
-import TodoFilter from './components/TodoFilter';
 import TodoList from './components/TodoList';
 import TodoInputForm from './components/TodoInputForm';
+import TodoFilter from './components/TodoFilter';
+import FilterProvider from './prodviders/FilterProvider';
 
 function App() {
   const [tasks, setTasks] = useState<ITodoItem[]>([
@@ -19,8 +20,6 @@ function App() {
       isDone: true,
     },
   ]);
-
-  const [filterInput, setFilterInput] = useState('');
 
   const onAdd = useCallback((newTodo: ITodoItemCreate | ITodoItemCreate[]) => {
     if (newTodo instanceof Array) {
@@ -56,9 +55,11 @@ function App() {
   return (
     <Stack maxWidth="720px" margin="32px auto" gap="10px">
       <Typography variant="h3">My Todos</Typography>
-      <TodoFilter filter={filterInput} onFilterSet={setFilterInput} />
-      <TodoInputForm onSave={onAdd}></TodoInputForm>
-      <TodoList todoList={tasks} filter={filterInput} onUpdate={onUpdate} onDelete={onDelete} />
+      <FilterProvider>
+        <TodoFilter />
+        <TodoInputForm onSave={onAdd} />
+        <TodoList todoList={tasks} onDelete={onDelete} onUpdate={onUpdate} />
+      </FilterProvider>
     </Stack>
   );
 }

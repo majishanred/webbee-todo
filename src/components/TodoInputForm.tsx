@@ -10,7 +10,7 @@ const TodoInputForm = memo(function ({ onSave }: { onSave: Dispatch<ITodoItemCre
   };
 
   const handleOnCreate = () => {
-    const newTodo = {
+    const newTodo: ITodoItemCreate = {
       task: input,
       isDone: false,
     };
@@ -20,8 +20,8 @@ const TodoInputForm = memo(function ({ onSave }: { onSave: Dispatch<ITodoItemCre
   };
 
   return (
-    <Box component="div" display="flex" alignItems="center">
-      <TextField placeholder="Type task here" value={input} onChange={handleOnChange} sx={{ width: '70%' }}></TextField>
+    <Box display="flex" alignItems="center">
+      <TextField placeholder="Type task here" value={input} onChange={handleOnChange} sx={{ width: '70%' }} />
       <ButtonGroup sx={{ marginLeft: 'auto' }}>
         <Button onClick={handleOnCreate} type="button" variant="contained">
           Create new task
