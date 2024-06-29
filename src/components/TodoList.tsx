@@ -1,16 +1,11 @@
-import { Dispatch, useContext, useMemo } from 'react';
-import { ITodoItem } from '../interfaces/ITodoItem';
+import { useContext, useMemo } from 'react';
 import TodoItem from './TodoItem';
 import ReadFilterContext from '../contexts/readFilterContext';
+import { TodoContext } from '../contexts/todoContext';
 
-type TodoListProps = {
-  todoList: ITodoItem[];
-  onUpdate: Dispatch<ITodoItem>;
-  onDelete: Dispatch<ITodoItem>;
-};
-
-export default function TodoList({ todoList, onUpdate, onDelete }: TodoListProps) {
+export default function TodoList() {
   const filter = useContext(ReadFilterContext);
+  const { todoList, onUpdate, onDelete } = useContext(TodoContext);
 
   const filteredTasks = useMemo(
     () => (filter ? todoList.filter((elem) => elem.task.toLowerCase().includes(filter.toLowerCase())) : todoList),

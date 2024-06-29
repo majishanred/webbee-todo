@@ -1,9 +1,9 @@
-import { ChangeEvent, memo, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Box, BoxProps, Button, ButtonGroup, Checkbox, TextField, Typography, styled } from '@mui/material';
 import { ITodoItem } from '../interfaces/ITodoItem';
 import { TodoItemProps } from '../interfaces/TodoItemProps';
 
-const TodoItem = memo(function ({ todoItem, onUpdate, onDelete }: TodoItemProps) {
+const TodoItem = ({ todoItem, onUpdate, onDelete }: TodoItemProps) => {
   const [isEdit, setIsEdit] = useState(false);
   const [input, setInput] = useState(todoItem.task);
 
@@ -66,7 +66,7 @@ const TodoItem = memo(function ({ todoItem, onUpdate, onDelete }: TodoItemProps)
       </ButtonGroup>
     </TodoStyledBox>
   );
-});
+};
 
 export default TodoItem;
 

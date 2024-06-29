@@ -1,9 +1,12 @@
-import { ChangeEvent, Dispatch, memo, useState } from 'react';
+import { ChangeEvent, useContext, useState } from 'react';
 import { ITodoItemCreate } from '../interfaces/ITodoItem';
 import { Box, Button, ButtonGroup, TextField } from '@mui/material';
+import { CreateTodoContext } from '../contexts/createTodoContext';
 
-const TodoInputForm = memo(function ({ onSave }: { onSave: Dispatch<ITodoItemCreate> }) {
+const TodoInputForm = () => {
   const [input, setInput] = useState('');
+
+  const onAdd = useContext(CreateTodoContext);
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
@@ -15,7 +18,7 @@ const TodoInputForm = memo(function ({ onSave }: { onSave: Dispatch<ITodoItemCre
       isDone: false,
     };
 
-    onSave(newTodo);
+    onAdd(newTodo);
     setInput('');
   };
 
@@ -29,6 +32,6 @@ const TodoInputForm = memo(function ({ onSave }: { onSave: Dispatch<ITodoItemCre
       </ButtonGroup>
     </Box>
   );
-});
+};
 
 export default TodoInputForm;
