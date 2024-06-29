@@ -1,6 +1,6 @@
 import { Dispatch, useContext, useMemo } from 'react';
 import { ITodoItem } from '../interfaces/ITodoItem';
-import TodoListElem from './TodoItem';
+import TodoItem from './TodoItem';
 import ReadFilterContext from '../contexts/readFilterContext';
 
 type TodoListProps = {
@@ -20,7 +20,7 @@ export default function TodoList({ todoList, onUpdate, onDelete }: TodoListProps
   return (
     <>
       {filteredTasks.map((todo) => (
-        <TodoListElem key={todo.id} todoItem={todo} onUpdate={onUpdate} onDelete={onDelete} />
+        <TodoItem key={todo.id} todoItem={todo} onUpdate={onUpdate} onDelete={onDelete} />
       ))}
     </>
   );

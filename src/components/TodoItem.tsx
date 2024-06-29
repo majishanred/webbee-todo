@@ -3,7 +3,7 @@ import { Box, BoxProps, Button, ButtonGroup, Checkbox, TextField, Typography, st
 import { ITodoItem } from '../interfaces/ITodoItem';
 import { TodoItemProps } from '../interfaces/TodoItemProps';
 
-const TodoListElem = memo(function ({ todoItem, onUpdate, onDelete }: TodoItemProps) {
+const TodoItem = memo(function ({ todoItem, onUpdate, onDelete }: TodoItemProps) {
   const [isEdit, setIsEdit] = useState(false);
   const [input, setInput] = useState(todoItem.task);
 
@@ -68,7 +68,7 @@ const TodoListElem = memo(function ({ todoItem, onUpdate, onDelete }: TodoItemPr
   );
 });
 
-export default TodoListElem;
+export default TodoItem;
 
 const TodoStyledBox = styled(Box)<BoxProps>`
   display: flex;
