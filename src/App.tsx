@@ -21,20 +21,10 @@ function App() {
     },
   ]);
 
-  const onAdd = useCallback((newTodo: ITodoItemCreate | ITodoItemCreate[]) => {
-    if (newTodo instanceof Array) {
-      const newTodos = newTodo
-        .filter((elem) => elem.task)
-        .map((elem) => {
-          return { ...elem, id: uuidv1() };
-        });
-
-      setTasks((tasks) => [...tasks, ...newTodos]);
-    } else {
-      if (!newTodo.task) return;
-      const elemToAdd = { ...newTodo, id: v1() };
-      setTasks((tasks) => [...tasks, elemToAdd]);
-    }
+  const onAdd = useCallback((newTodo: ITodoItemCreate) => {
+    if (!newTodo.task) return;
+    const elemToAdd = { ...newTodo, id: v1() };
+    setTasks((tasks) => [...tasks, elemToAdd]);
   }, []);
 
   const onUpdate = useCallback((todoItem: ITodoItem) => {
