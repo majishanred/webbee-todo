@@ -1,6 +1,6 @@
 import { PropsWithChildren, useState } from 'react';
-import ReadFilterContext from '../contexts/readFilterContext';
-import UpdateFilterContext from '../contexts/updateFilterContext';
+import ReadFilterContext from '../contexts/ReadFilterContext';
+import UpdateFilterContext from '../contexts/UpdateFilterContext';
 
 const FilterProvider = ({ children }: PropsWithChildren) => {
   const [filter, setFilter] = useState('');

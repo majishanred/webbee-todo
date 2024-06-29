@@ -1,7 +1,7 @@
 import { useContext, useMemo } from 'react';
 import TodoItem from './TodoItem';
-import ReadFilterContext from '../contexts/readFilterContext';
-import { TodoContext } from '../contexts/todoContext';
+import ReadFilterContext from '../contexts/ReadFilterContext';
+import { TodoContext } from '../contexts/TodoContext';
 
 export default function TodoList() {
   const filter = useContext(ReadFilterContext);

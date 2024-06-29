@@ -1,8 +1,8 @@
 import { useState, useCallback, PropsWithChildren } from 'react';
 import { v1 as uuidv1 } from 'uuid';
 import { ITodoItem, ITodoItemCreate } from '../interfaces/ITodoItem';
-import { TodoContext } from '../contexts/todoContext';
-import { CreateTodoContext } from '../contexts/createTodoContext';
+import { TodoContext } from '../contexts/TodoContext';
+import { CreateTodoContext } from '../contexts/CreateTodoContext';
 
 export const TodoProvider = ({ children }: PropsWithChildren) => {
   const [tasks, setTasks] = useState<ITodoItem[]>([

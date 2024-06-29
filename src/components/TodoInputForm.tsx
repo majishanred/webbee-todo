@@ -1,7 +1,7 @@
 import { ChangeEvent, useContext, useState } from 'react';
 import { ITodoItemCreate } from '../interfaces/ITodoItem';
 import { Box, Button, ButtonGroup, TextField } from '@mui/material';
-import { CreateTodoContext } from '../contexts/createTodoContext';
+import { CreateTodoContext } from '../contexts/CreateTodoContext';
 
 const TodoInputForm = () => {
   const [input, setInput] = useState('');

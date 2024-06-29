@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material';
 import { ChangeEvent, useContext } from 'react';
 import debounce from 'lodash.debounce';
-import UpdateFilterContext from '../contexts/updateFilterContext';
+import UpdateFilterContext from '../contexts/UpdateFilterContext';
 
 const TodoFilter = () => {
   const setFilter = useContext(UpdateFilterContext);
