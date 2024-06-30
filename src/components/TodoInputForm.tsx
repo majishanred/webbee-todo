@@ -6,7 +6,7 @@ import { WriteTodoContext } from '../contexts/WriteTodoContext';
 const TodoInputForm = () => {
   const [input, setInput] = useState('');
 
-  const { onAdd } = useContext(WriteTodoContext);
+  const dispatch = useContext(WriteTodoContext);
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
@@ -18,9 +18,11 @@ const TodoInputForm = () => {
       isDone: false,
     };
 
-    onAdd(newTodo);
+    dispatch({ todo: newTodo, type: 'add' });
     setInput('');
   };
+
+  console.log('Input form rerenders');
 
   return (
     <Box display="flex" alignItems="center">

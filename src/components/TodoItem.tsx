@@ -15,14 +15,14 @@ const TodoItem = ({ todoItem, onUpdate, onDelete }: TodoItemProps) => {
       task: input,
     };
 
-    onUpdate(updatedTodo);
+    onUpdate({ type: 'update', todo: updatedTodo });
     setIsEdit(false);
   };
 
   const handleCheckboxClick = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.checked;
     const updatedTodo: ITodoItem = { ...todoItem, isDone: value };
-    onUpdate(updatedTodo);
+    onUpdate({ type: 'update', todo: updatedTodo });
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +60,7 @@ const TodoItem = ({ todoItem, onUpdate, onDelete }: TodoItemProps) => {
         <Button onClick={() => setIsEdit(true)} variant="contained">
           Edit
         </Button>
-        <Button onClick={() => onDelete(todoItem)} variant="contained" color="error">
+        <Button onClick={() => onDelete({ type: 'delete', todo: todoItem })} variant="contained" color="error">
           Delete
         </Button>
       </ButtonGroup>

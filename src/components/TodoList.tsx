@@ -7,7 +7,9 @@ import { WriteTodoContext } from '../contexts/WriteTodoContext';
 export default function TodoList() {
   const filter = useContext(ReadFilterContext);
   const todoList = useContext(TodoReadContext);
-  const { onUpdate, onDelete } = useContext(WriteTodoContext);
+  const dispatch = useContext(WriteTodoContext);
+
+  console.log('Todo List rerenders');
 
   const filteredTasks = useMemo(
     () => (filter ? todoList.filter((elem) => elem.task.toLowerCase().includes(filter.toLowerCase())) : todoList),
@@ -17,7 +19,7 @@ export default function TodoList() {
   return (
     <>
       {filteredTasks.map((todo) => (
-        <TodoItem key={todo.id} todoItem={todo} onUpdate={onUpdate} onDelete={onDelete} />
+        <TodoItem key={todo.id} todoItem={todo} onUpdate={dispatch} onDelete={dispatch} />
       ))}
     </>
   );

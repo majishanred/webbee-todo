@@ -1,12 +1,4 @@
 import { Dispatch, createContext } from 'react';
-import { ITodoItem, ITodoItemCreate } from '../interfaces/ITodoItem';
+import { TodoAction } from '../reducers/TodoReducer';
 
-export const WriteTodoContext = createContext<{
-  onAdd: Dispatch<ITodoItemCreate>;
-  onDelete: Dispatch<ITodoItem>;
-  onUpdate: Dispatch<ITodoItem>;
-}>({
-  onAdd: () => {},
-  onUpdate: () => {},
-  onDelete: () => {},
-});
+export const WriteTodoContext = createContext<Dispatch<TodoAction>>(() => {});
