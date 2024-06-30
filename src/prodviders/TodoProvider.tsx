@@ -1,8 +1,8 @@
-import { useState, useCallback, PropsWithChildren } from 'react';
+import { useState, useCallback, PropsWithChildren, useMemo } from 'react';
 import { v1 as uuidv1 } from 'uuid';
 import { ITodoItem, ITodoItemCreate } from '../interfaces/ITodoItem';
-import { TodoContext } from '../contexts/TodoContext';
-import { CreateTodoContext } from '../contexts/CreateTodoContext';
+import { TodoReadContext } from '../contexts/ReadTodoContext';
+import { WriteTodoContext } from '../contexts/WriteTodoContext';
 
 export const TodoProvider = ({ children }: PropsWithChildren) => {
   const [tasks, setTasks] = useState<ITodoItem[]>([
@@ -39,11 +39,17 @@ export const TodoProvider = ({ children }: PropsWithChildren) => {
     setTasks((tasks) => tasks.filter((elem) => elem.id !== todoItem.id));
   }, []);
 
+  const writeFuncs = useMemo(() => {
+    return {
+      onAdd,
+      onUpdate,
+      onDelete,
+    };
+  }, [onAdd, onUpdate, onDelete]);
+
   return (
-    <CreateTodoContext.Provider value={onAdd}>
-      <TodoContext.Provider value={{ todoList: tasks, onDelete: onDelete, onUpdate: onUpdate }}>
-        {children}
-      </TodoContext.Provider>
-    </CreateTodoContext.Provider>
+    <WriteTodoContext.Provider value={writeFuncs}>
+      <TodoReadContext.Provider value={tasks}>{children}</TodoReadContext.Provider>
+    </WriteTodoContext.Provider>
   );
 };
