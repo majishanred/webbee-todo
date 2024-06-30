@@ -9,8 +9,6 @@ export default function TodoList() {
   const todoList = useContext(TodoReadContext);
   const dispatch = useContext(WriteTodoContext);
 
-  console.log('Todo List rerenders');
-
   const filteredTasks = useMemo(
     () => (filter ? todoList.filter((elem) => elem.task.toLowerCase().includes(filter.toLowerCase())) : todoList),
     [todoList, filter],

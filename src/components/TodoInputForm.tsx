@@ -22,8 +22,6 @@ const TodoInputForm = () => {
     setInput('');
   };
 
-  console.log('Input form rerenders');
-
   return (
     <Box display="flex" alignItems="center">
       <TextField placeholder="Type task here" value={input} onChange={handleOnChange} sx={{ width: '70%' }} />
