@@ -7,10 +7,10 @@ export type TodoAction =
   | { type: 'update'; todo: ITodoItem };
 
 export function TodoReducer(todos: ITodoItem[], action: TodoAction): ITodoItem[] {
+  if (!action.todo.task) return todos;
+
   if (action.type === 'add') {
     const { todo } = action;
-
-    if (!todo.task) throw new Error();
 
     const elemToAdd: ITodoItem = { ...todo, id: uuidv1() };
 
