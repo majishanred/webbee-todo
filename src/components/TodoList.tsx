@@ -1,13 +1,11 @@
 import { useContext, useMemo } from 'react';
 import TodoItem from './TodoItem';
-import ReadFilterContext from '../contexts/ReadFilterContext';
-import { TodoReadContext } from '../contexts/ReadTodoContext';
-import { WriteTodoContext } from '../contexts/WriteTodoContext';
+import { ReadTodoContext } from '../contexts/TodoContext';
+import { ReadFilterContext } from '../contexts/FilterContext';
 
 export default function TodoList() {
   const filter = useContext(ReadFilterContext);
-  const todoList = useContext(TodoReadContext);
-  const dispatch = useContext(WriteTodoContext);
+  const todoList = useContext(ReadTodoContext);
 
   const filteredTasks = useMemo(
     () => (filter ? todoList.filter((elem) => elem.task.toLowerCase().includes(filter.toLowerCase())) : todoList),
@@ -17,7 +15,7 @@ export default function TodoList() {
   return (
     <>
       {filteredTasks.map((todo) => (
-        <TodoItem key={todo.id} todoItem={todo} onUpdate={dispatch} onDelete={dispatch} />
+        <TodoItem key={todo.id} todoItem={todo} />
       ))}
     </>
   );

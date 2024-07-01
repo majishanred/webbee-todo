@@ -1,13 +1,34 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useContext, useState } from 'react';
 import { Box, BoxProps, Button, ButtonGroup, Checkbox, TextField, Typography, styled } from '@mui/material';
 import { ITodoItem } from '../interfaces/ITodoItem';
 import { TodoItemProps } from '../interfaces/TodoItemProps';
+import { WriteTodoContext } from '../contexts/TodoContext';
 
-const TodoItem = ({ todoItem, onUpdate, onDelete }: TodoItemProps) => {
+const TodoItem = ({ todoItem }: TodoItemProps) => {
+  const { task, isDone } = todoItem;
+
   const [isEdit, setIsEdit] = useState(false);
   const [input, setInput] = useState(todoItem.task);
 
-  const { task, isDone } = todoItem;
+  const saveTodos = useContext(WriteTodoContext);
+
+  const onDelete = () => {
+    if (!saveTodos) return;
+    saveTodos((todos) => todos.filter((elem) => elem.id !== todoItem.id));
+  };
+
+  const onUpdate = (updatedTodo: ITodoItem) => {
+    if (!saveTodos) return;
+
+    saveTodos((todos) => {
+      const index = todos.findIndex((elem) => elem.id === updatedTodo.id);
+
+      const newArr = [...todos];
+      newArr[index] = updatedTodo;
+
+      return newArr;
+    });
+  };
 
   const handleOnSaveClick = () => {
     const updatedTodo: ITodoItem = {
@@ -15,14 +36,15 @@ const TodoItem = ({ todoItem, onUpdate, onDelete }: TodoItemProps) => {
       task: input,
     };
 
-    onUpdate({ type: 'update', todo: updatedTodo });
+    onUpdate(updatedTodo);
     setIsEdit(false);
   };
 
   const handleCheckboxClick = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.checked;
     const updatedTodo: ITodoItem = { ...todoItem, isDone: value };
-    onUpdate({ type: 'update', todo: updatedTodo });
+
+    onUpdate(updatedTodo);
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +82,7 @@ const TodoItem = ({ todoItem, onUpdate, onDelete }: TodoItemProps) => {
         <Button onClick={() => setIsEdit(true)} variant="contained">
           Edit
         </Button>
-        <Button onClick={() => onDelete({ type: 'delete', todo: todoItem })} variant="contained" color="error">
+        <Button onClick={onDelete} variant="contained" color="error">
           Delete
         </Button>
       </ButtonGroup>

@@ -1,24 +1,27 @@
 import { ChangeEvent, useContext, useState } from 'react';
-import { ITodoItemCreate } from '../interfaces/ITodoItem';
 import { Box, Button, ButtonGroup, TextField } from '@mui/material';
-import { WriteTodoContext } from '../contexts/WriteTodoContext';
+import { WriteTodoContext } from '../contexts/TodoContext';
+import { v1 as uuidv1 } from 'uuid';
+import { ITodoItem } from '../interfaces/ITodoItem';
 
 const TodoInputForm = () => {
   const [input, setInput] = useState('');
 
-  const dispatch = useContext(WriteTodoContext);
+  const saveTodos = useContext(WriteTodoContext);
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
 
   const handleOnCreate = () => {
-    const newTodo: ITodoItemCreate = {
+    if (!saveTodos) return;
+    const newTodo: ITodoItem = {
+      id: uuidv1(),
       task: input,
       isDone: false,
     };
 
-    dispatch({ todo: newTodo, type: 'add' });
+    saveTodos((todos) => [...todos, newTodo]);
     setInput('');
   };
 

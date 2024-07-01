@@ -3,5 +3,3 @@ export interface ITodoItem {
   task: string;
   isDone: boolean;
 }
-
-export interface ITodoItemCreate extends Omit<ITodoItem, 'id'> {}
