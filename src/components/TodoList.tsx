@@ -7,10 +7,12 @@ export default function TodoList() {
   const filter = useContext(ReadFilterContext);
   const todoList = useContext(ReadTodoContext);
 
-  const filteredTasks = useMemo(
-    () => (filter ? todoList.filter((elem) => elem.task.toLowerCase().includes(filter.toLowerCase())) : todoList),
-    [todoList, filter],
-  );
+  const filteredTasks = useMemo(() => {
+    if (filter) {
+      return todoList.filter((elem) => elem.task.toLowerCase().includes(filter.toLowerCase()));
+    }
+    return todoList;
+  }, [todoList, filter]);
 
   return (
     <>

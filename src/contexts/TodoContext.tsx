@@ -1,6 +1,6 @@
-import { Dispatch, PropsWithChildren, SetStateAction, createContext, useState } from 'react';
+import { Dispatch, PropsWithChildren, SetStateAction, createContext, useContext, useState } from 'react';
 import { ITodoItem } from '../interfaces/ITodoItem';
-import { v1 as uuidv1 } from 'uuid';
+import { stringHash } from '../utils';
 
 export const ReadTodoContext = createContext<ITodoItem[]>([]);
 
@@ -8,12 +8,12 @@ export const WriteTodoContext = createContext<Dispatch<SetStateAction<ITodoItem[
 
 const defaultTasks: ITodoItem[] = [
   {
-    id: uuidv1(),
+    id: stringHash('Feed a cat'),
     task: 'Feed a cat',
     isDone: false,
   },
   {
-    id: uuidv1(),
+    id: stringHash('Buy a milk'),
     task: 'Buy a milk',
     isDone: true,
   },
@@ -28,3 +28,13 @@ export const TodoProvider = ({ children }: PropsWithChildren) => {
     </WriteTodoContext.Provider>
   );
 };
+
+export const useSetTodos = () => {
+  const setTodos = useContext(WriteTodoContext);
+
+  if (!setTodos) throw new Error('Set todo is not found, check your contexts pls');
+
+  return setTodos;
+};
+
+export default useSetTodos;

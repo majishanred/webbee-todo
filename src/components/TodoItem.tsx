@@ -1,8 +1,8 @@
-import { ChangeEvent, useContext, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Box, BoxProps, Button, ButtonGroup, Checkbox, TextField, Typography, styled } from '@mui/material';
 import { ITodoItem } from '../interfaces/ITodoItem';
 import { TodoItemProps } from '../interfaces/TodoItemProps';
-import { WriteTodoContext } from '../contexts/TodoContext';
+import useSetTodos from '../contexts/TodoContext';
 
 const TodoItem = ({ todoItem }: TodoItemProps) => {
   const { task, isDone } = todoItem;
@@ -10,17 +10,15 @@ const TodoItem = ({ todoItem }: TodoItemProps) => {
   const [isEdit, setIsEdit] = useState(false);
   const [input, setInput] = useState(todoItem.task);
 
-  const saveTodos = useContext(WriteTodoContext);
+  const setTodos = useSetTodos();
 
   const onDelete = () => {
-    if (!saveTodos) return;
-    saveTodos((todos) => todos.filter((elem) => elem.id !== todoItem.id));
+    setTodos((todos) => todos.filter((elem) => elem.id !== todoItem.id));
   };
 
   const onUpdate = (updatedTodo: ITodoItem) => {
-    if (!saveTodos) return;
-
-    saveTodos((todos) => {
+    if (!updatedTodo.task) return;
+    setTodos((todos) => {
       const index = todos.findIndex((elem) => elem.id === updatedTodo.id);
 
       const newArr = [...todos];
