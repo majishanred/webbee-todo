@@ -10,8 +10,6 @@ const TodoInputForm = () => {
 
   const setTodos = useSetRecoilState(todoListAtom);
 
-  console.log('Form rerenders');
-
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
