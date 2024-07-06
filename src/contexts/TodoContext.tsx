@@ -1,40 +1,15 @@
-import { Dispatch, PropsWithChildren, SetStateAction, createContext, useContext, useState } from 'react';
-import { ITodoItem } from '../interfaces/ITodoItem';
-import { stringHash } from '../utils';
+import { PropsWithChildren, createContext, useContext } from 'react';
+import { TodoObservable } from '../observables/TodoObservable';
 
-export const ReadTodoContext = createContext<ITodoItem[]>([]);
-
-export const WriteTodoContext = createContext<Dispatch<SetStateAction<ITodoItem[]>> | null>(null);
-
-const defaultTasks: ITodoItem[] = [
-  {
-    id: stringHash('Feed a cat'),
-    task: 'Feed a cat',
-    isDone: false,
-  },
-  {
-    id: stringHash('Buy a milk'),
-    task: 'Buy a milk',
-    isDone: true,
-  },
-];
+export const TodoContext = createContext<typeof TodoObservable | null>(null);
 
 export const TodoProvider = ({ children }: PropsWithChildren) => {
-  const [todos, setTodos] = useState(defaultTasks);
-
-  return (
-    <WriteTodoContext.Provider value={setTodos}>
-      <ReadTodoContext.Provider value={todos}>{children}</ReadTodoContext.Provider>
-    </WriteTodoContext.Provider>
-  );
+  return <TodoContext.Provider value={TodoObservable}>{children}</TodoContext.Provider>;
 };
 
-export const useSetTodos = () => {
-  const setTodos = useContext(WriteTodoContext);
+export const useStore = () => {
+  const ctx = useContext(TodoContext);
+  if (!ctx) throw new Error('No context provided');
 
-  if (!setTodos) throw new Error('Set todo is not found, check your contexts pls');
-
-  return setTodos;
+  return ctx;
 };
-
-export default useSetTodos;

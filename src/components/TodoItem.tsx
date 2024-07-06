@@ -2,30 +2,21 @@ import { ChangeEvent, useState } from 'react';
 import { Box, BoxProps, Button, ButtonGroup, Checkbox, TextField, Typography, styled } from '@mui/material';
 import { ITodoItem } from '../interfaces/ITodoItem';
 import { TodoItemProps } from '../interfaces/TodoItemProps';
-import useSetTodos from '../contexts/TodoContext';
+import { observer } from 'mobx-react-lite';
+import { deleteTodo, updateTodo } from '../observables/TodoObservable';
 
-const TodoItem = ({ todoItem }: TodoItemProps) => {
+const TodoItem = observer(({ todoItem }: TodoItemProps) => {
   const { task, isDone } = todoItem;
-
   const [isEdit, setIsEdit] = useState(false);
   const [input, setInput] = useState(todoItem.task);
 
-  const setTodos = useSetTodos();
-
   const onDelete = () => {
-    setTodos((todos) => todos.filter((elem) => elem.id !== todoItem.id));
+    deleteTodo(todoItem);
   };
 
   const onUpdate = (updatedTodo: ITodoItem) => {
     if (!updatedTodo.task) return;
-    setTodos((todos) => {
-      const index = todos.findIndex((elem) => elem.id === updatedTodo.id);
-
-      const newArr = [...todos];
-      newArr[index] = updatedTodo;
-
-      return newArr;
-    });
+    updateTodo(updatedTodo);
   };
 
   const handleOnSaveClick = () => {
@@ -74,7 +65,7 @@ const TodoItem = ({ todoItem }: TodoItemProps) => {
     <TodoStyledBox component="div">
       <Checkbox checked={isDone} onChange={handleCheckboxClick} />
       <Typography component={'span'} variant="body1" sx={{ textDecoration: todoItem.isDone ? 'line-through' : 'none' }}>
-        {todoItem.task}
+        {task}
       </Typography>
       <ButtonGroup disableRipple={true} sx={{ marginLeft: 'auto' }}>
         <Button onClick={() => setIsEdit(true)} variant="contained">
@@ -86,7 +77,7 @@ const TodoItem = ({ todoItem }: TodoItemProps) => {
       </ButtonGroup>
     </TodoStyledBox>
   );
-};
+});
 
 export default TodoItem;
 

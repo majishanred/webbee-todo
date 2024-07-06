@@ -1,13 +1,9 @@
 import { ChangeEvent, useState } from 'react';
 import { Box, Button, ButtonGroup, TextField } from '@mui/material';
-import { ITodoItem } from '../interfaces/ITodoItem';
-import useSetTodos from '../contexts/TodoContext';
-import { stringHash } from '../utils';
+import { addTodo } from '../observables/TodoObservable';
 
 const TodoInputForm = () => {
   const [input, setInput] = useState('');
-
-  const setTodos = useSetTodos();
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
@@ -15,14 +11,9 @@ const TodoInputForm = () => {
 
   const handleOnCreate = () => {
     if (!input) return;
-    setTodos((todos) => {
-      const newTodo: ITodoItem = {
-        id: stringHash(input),
-        task: input,
-        isDone: false,
-      };
-
-      return [...todos, newTodo];
+    addTodo({
+      task: input,
+      isDone: false,
     });
     setInput('');
   };

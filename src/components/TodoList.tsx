@@ -1,18 +1,17 @@
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 import TodoItem from './TodoItem';
-import { ReadTodoContext } from '../contexts/TodoContext';
-import { ReadFilterContext } from '../contexts/FilterContext';
+import { observer } from 'mobx-react-lite';
+import { useStore } from '../contexts/TodoContext';
 
-export default function TodoList() {
-  const filter = useContext(ReadFilterContext);
-  const todoList = useContext(ReadTodoContext);
+const TodoList = observer(() => {
+  const { filter, todos } = useStore();
 
   const filteredTasks = useMemo(() => {
     if (filter) {
-      return todoList.filter((elem) => elem.task.toLowerCase().includes(filter.toLowerCase()));
+      return todos.filter((elem) => elem.task.toLowerCase().includes(filter.toLowerCase()));
     }
-    return todoList;
-  }, [todoList, filter]);
+    return todos;
+  }, [filter, todos]);
 
   return (
     <>
@@ -21,4 +20,6 @@ export default function TodoList() {
       ))}
     </>
   );
-}
+});
+
+export default TodoList;
