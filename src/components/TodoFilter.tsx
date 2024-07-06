@@ -1,13 +1,13 @@
 import { TextField } from '@mui/material';
-import { ChangeEvent, useContext } from 'react';
+import { ChangeEvent } from 'react';
 import debounce from 'lodash.debounce';
-import { WriteFilterContext } from '../contexts/FilterContext';
+import { useSetRecoilState } from 'recoil';
+import { filterAtom } from '../atoms/TodoAtom';
 
 const TodoFilter = () => {
-  const setFilter = useContext(WriteFilterContext);
+  const setFilter = useSetRecoilState(filterAtom);
 
   const handleOnChange = debounce((e: ChangeEvent<HTMLInputElement>) => {
-    if (!setFilter) return;
     setFilter(e.target.value);
   }, 500);
 
