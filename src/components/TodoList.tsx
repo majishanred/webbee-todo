@@ -1,11 +1,11 @@
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 import TodoItem from './TodoItem';
-import { ReadTodoContext } from '../contexts/TodoContext';
-import { ReadFilterContext } from '../contexts/FilterContext';
+import { useRecoilValue } from 'recoil';
+import { filterAtom, todoListAtom } from '../atoms/TodoAtom';
 
 export default function TodoList() {
-  const filter = useContext(ReadFilterContext);
-  const todoList = useContext(ReadTodoContext);
+  const filter = useRecoilValue(filterAtom);
+  const todoList = useRecoilValue(todoListAtom);
 
   const filteredTasks = useMemo(() => {
     if (filter) {

@@ -2,7 +2,8 @@ import { ChangeEvent, useState } from 'react';
 import { Box, BoxProps, Button, ButtonGroup, Checkbox, TextField, Typography, styled } from '@mui/material';
 import { ITodoItem } from '../interfaces/ITodoItem';
 import { TodoItemProps } from '../interfaces/TodoItemProps';
-import useSetTodos from '../contexts/TodoContext';
+import { useSetRecoilState } from 'recoil';
+import { todoListAtom } from '../atoms/TodoAtom';
 
 const TodoItem = ({ todoItem }: TodoItemProps) => {
   const { task, isDone } = todoItem;
@@ -10,7 +11,7 @@ const TodoItem = ({ todoItem }: TodoItemProps) => {
   const [isEdit, setIsEdit] = useState(false);
   const [input, setInput] = useState(todoItem.task);
 
-  const setTodos = useSetTodos();
+  const setTodos = useSetRecoilState(todoListAtom);
 
   const onDelete = () => {
     setTodos((todos) => todos.filter((elem) => elem.id !== todoItem.id));

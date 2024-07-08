@@ -1,13 +1,14 @@
 import { ChangeEvent, useState } from 'react';
 import { Box, Button, ButtonGroup, TextField } from '@mui/material';
 import { ITodoItem } from '../interfaces/ITodoItem';
-import useSetTodos from '../contexts/TodoContext';
 import { stringHash } from '../utils';
+import { useSetRecoilState } from 'recoil';
+import { todoListAtom } from '../atoms/TodoAtom';
 
 const TodoInputForm = () => {
   const [input, setInput] = useState('');
 
-  const setTodos = useSetTodos();
+  const setTodos = useSetRecoilState(todoListAtom);
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
